@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FileWithPreview } from '../../utils/setImagePreview.js'
 
 // --------------------------------------------------------------------------------
@@ -9,22 +9,24 @@ function getFilesFromStorage() {
 }
 
 const initialState: {
-    files: FileWithPreview[]
+    gallery: FileWithPreview[],
+    template: FileWithPreview[],
+    background: FileWithPreview[]
 } = {
-    files: getFilesFromStorage()
+    gallery: [],
+    template: [],
+    background: []
 }
 
 const filesSlice = createSlice({
     name: 'files',
     initialState,
     reducers: {
-        setFiles: (state, action) => {
-            state.files = action.payload
-            // localStorage.setItem('files', JSON.stringify(state.files))
+        setFiles: (state, action: PayloadAction<{ files: FileWithPreview[], type: 'gallery' | 'template' | 'background' }>) => {
+            state[action.payload.type] = [...state[action.payload.type], ...action.payload.files]
         },
-        resetFiles: (state) => {
-            state.files = initialState.files
-            localStorage.removeItem('files')
+        resetFiles: (state, action: PayloadAction<{ type: 'gallery' | 'template' | 'background' }>) => {
+            state[action.payload.type] = initialState[action.payload.type]
         }
     }
 })

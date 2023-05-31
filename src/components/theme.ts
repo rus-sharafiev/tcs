@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material/styles"
-import { backgroundColor } from "../../build/index.js"
 
 // ----------------------------------------------------------------------
 
@@ -7,6 +6,9 @@ export const theme = createTheme({
     palette: {
         primary: {
             main: '#202667'
+        },
+        secondary: {
+            main: '#f2f2f2'
         }
     },
     components: {
@@ -24,7 +26,6 @@ export const theme = createTheme({
                     textTransform: 'none',
                     fontWeight: '300',
                     padding: '5px 10px'
-
                 },
 
             },

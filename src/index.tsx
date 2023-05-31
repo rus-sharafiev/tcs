@@ -1,9 +1,9 @@
-import { createRoot } from 'react-dom/client'
 import { App } from './App'
-import { ThemeProvider } from '@mui/material/styles'
-import { theme } from './components/theme'
-import { Provider } from 'react-redux'
 import { store } from './store'
+import { Provider } from 'react-redux'
+import { theme } from './components/theme'
+import { createRoot } from 'react-dom/client'
+import { ThemeProvider } from '@mui/material/styles'
 
 // --------------------------------------------------------------------------------
 

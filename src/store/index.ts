@@ -6,6 +6,7 @@ import {
     useSelector,
 } from 'react-redux'
 
+// reducers
 import filesReducer from './reducers/filesSlice.js'
 
 // --------------------------------------------------------------------------------
@@ -13,7 +14,8 @@ import filesReducer from './reducers/filesSlice.js'
 export const store = configureStore({
     reducer: {
         files: filesReducer,
-    }
+    },
+    middleware: (gDM) => gDM({ serializableCheck: false })
 })
 
 setupListeners(store.dispatch)
