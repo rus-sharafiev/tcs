@@ -1,15 +1,16 @@
 import type SwiperCore from 'swiper'
 import { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { setImagePreview } from "../utils/setImagePreview.js"
-import { useAppDispatch, useAppSelector } from "../store/index.js"
-import { resetFiles, setFiles } from "../store/reducers/filesSlice.js"
+import { useAppDispatch, useAppSelector } from "../store/index"
+import { removeFile, resetFiles, resetSlides, setFiles } from "../store/reducers/filesSlice"
 // @mui
 import Button from "@mui/material/Button"
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded'
 import ZoomInMapRoundedIcon from '@mui/icons-material/ZoomInMapRounded'
 import ZoomOutMapRoundedIcon from '@mui/icons-material/ZoomOutMapRounded'
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded'
+import { getImageObject } from '../utils/getImageObject'
+import IconButton from '@mui/material/IconButton'
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ export const Gallery = (props: TabProps) => {
     const [expanded, setExpanded] = useState(false)
 
     const onDrop = async (acceptedFiles: File[]) => {
-        const filesWithPreview = await Promise.all(acceptedFiles.map(file => setImagePreview(file)))
+        const filesWithPreview = await Promise.all(acceptedFiles.map(file => getImageObject(file)))
         dispatch(setFiles({ files: filesWithPreview, type }))
     }
 
@@ -63,7 +64,7 @@ export const Gallery = (props: TabProps) => {
                             color="secondary"
                             startIcon={<ClearRoundedIcon />}
                             disableElevation
-                            onClick={() => dispatch(resetFiles({ type }))}
+                            onClick={() => dispatch(resetSlides())}
                         >
                             Очистить
                         </Button>
@@ -93,7 +94,12 @@ export const Gallery = (props: TabProps) => {
                         </div>
 
                         {files.length > 0 && files.map((file, index) =>
-                            <img src={file.preview} key={'gallery-img-' + index} onClick={() => slideTo(index)} />
+                            <div key={'gallery-img-' + index}>
+                                <img src={file.data as string} onClick={() => slideTo(index)} />
+                                <IconButton onClick={() => dispatch(removeFile({ index, type }))}>
+                                    <ClearRoundedIcon />
+                                </IconButton>
+                            </div>
                         )}
                     </div>
                 </>}
