@@ -2,14 +2,14 @@ import type SwiperCore from 'swiper'
 import { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { useAppDispatch, useAppSelector } from "../store/index"
-import { removeFile, resetFiles, resetSlides, setFiles } from "../store/reducers/filesSlice"
+import { addFileToSlide, removeFile, resetFiles, resetSlides, setFiles } from "../store/reducers/filesSlice"
 // @mui
 import Button from "@mui/material/Button"
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded'
 import ZoomInMapRoundedIcon from '@mui/icons-material/ZoomInMapRounded'
 import ZoomOutMapRoundedIcon from '@mui/icons-material/ZoomOutMapRounded'
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded'
-import { getImageObject } from '../utils/getImageObject'
+import { ImageFileObject, getImageObject } from '../utils/getImageObject'
 import IconButton from '@mui/material/IconButton'
 
 // ----------------------------------------------------------------------
@@ -27,6 +27,7 @@ export const Gallery = (props: TabProps) => {
     const slideTo = (index: number) => swiper && swiper.slideTo(index)
 
     const files = useAppSelector(state => state.files[type])
+    const slides = useAppSelector(state => state.files.slides)
     const dispatch = useAppDispatch()
 
     const [expanded, setExpanded] = useState(false)
@@ -37,6 +38,15 @@ export const Gallery = (props: TabProps) => {
     }
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop, noDrag: true })
+
+    const handleAddToSlide = (file: ImageFileObject) => {
+        if (!swiper) return
+        let side: 'left' | 'right' | undefined = undefined
+        if (!slides[swiper.activeIndex].right) side = 'right'
+        if (!slides[swiper.activeIndex].left) side = 'left'
+
+        side && dispatch(addFileToSlide({ file, index: swiper.activeIndex, side }))
+    }
 
     useEffect(() => {
         const container = document.getElementById('container')
@@ -95,7 +105,7 @@ export const Gallery = (props: TabProps) => {
 
                         {files.length > 0 && files.map((file, index) =>
                             <div key={'gallery-img-' + index}>
-                                <img src={file.data as string} onClick={() => slideTo(index)} />
+                                <img src={file.data as string} onClick={() => handleAddToSlide(file)} />
                                 <IconButton onClick={() => dispatch(removeFile({ index, type }))}>
                                     <ClearRoundedIcon />
                                 </IconButton>

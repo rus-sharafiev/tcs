@@ -29,24 +29,24 @@ const filesSlice = createSlice({
         },
         setFiles: (state, action: PayloadAction<{ files: ImageFileObject[], type: 'gallery' | 'template' | 'background' }>) => {
             state[action.payload.type] = [...state[action.payload.type], ...action.payload.files]
-            localStorage.setItem(action.payload.type, JSON.stringify(state[action.payload.type]))
+            // localStorage.setItem(action.payload.type, JSON.stringify(state[action.payload.type]))
         },
         removeFile: (state, action: PayloadAction<{ index: number, type: 'gallery' | 'template' | 'background' }>) => {
             state[action.payload.type] = state[action.payload.type].filter((_, index) => index !== action.payload.index)
-            localStorage.setItem(action.payload.type, JSON.stringify(state[action.payload.type]))
+            // localStorage.setItem(action.payload.type, JSON.stringify(state[action.payload.type]))
         },
         resetFiles: (state, action: PayloadAction<{ type: 'gallery' | 'template' | 'background' }>) => {
             state[action.payload.type] = initialState[action.payload.type]
-            localStorage.removeItem(action.payload.type)
+            // localStorage.removeItem(action.payload.type)
         },
 
         addFileToSlide: (state, action: PayloadAction<{ file: ImageFileObject, index: number, side: 'left' | 'right' }>) => {
             state.slides[action.payload.index] = { ...state.slides[action.payload.index], [action.payload.side]: action.payload.file }
-            localStorage.setItem('slides', JSON.stringify(state.slides))
+            // localStorage.setItem('slides', JSON.stringify(state.slides))
         },
         resetSlides: (state) => {
             state.slides = initialState.slides
-            localStorage.removeItem('slides')
+            // localStorage.removeItem('slides')
         },
     }
 })
